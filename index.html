@@ -326,7 +326,7 @@
       bookResult.innerHTML = generatedBooks[title];
     } else {
       // If not, generate new content
-      const randomText = insertPunctuationRandomly(generateRandomText(500)); // Generate 500 random characters
+      const randomText = insertPunctuationRandomly(generateRandomText(1000)); // Generate 1000 random characters
       const content = `<h2 class="book-title">${title}</h2><p class="book-page">Page: ${page}</p><p class="book-text">${insertRandomly(randomText, term)}</p>`;
       
       // Store the generated content
@@ -363,6 +363,7 @@
     }
   }
 </script>
+
 
 
 
