@@ -26,6 +26,7 @@
 
     img {
       width: 150px;
+      cursor: pointer;
     }
 
     .container {
@@ -191,13 +192,12 @@
 <body>
 
 <header>
+  <img src="logo.svg" alt="Library Logo" onclick="window.location.reload();">
   <div class="menu-icon" onclick="toggleMenu()">
     <div class="line"></div>
     <div class="line"></div>
     <div class="line"></div>
   </div>
-
-  <img src="logo.svg" alt="Library Logo">
 </header>
 
 <div id="menu" class="nav-menu">
@@ -220,8 +220,6 @@
 
   <div id="book-result" class="book-text"></div>
 
-  
-
   <div class="book-list" id="book-list"></div> <!-- Lista de libros -->
 
 </div>
@@ -231,7 +229,6 @@
 <p>(This page does not recreate, it just uses a concept, and it does not use any kind of mathematics, it is just basic logic and it was made for the simple fact of entertainment). </p>
 
 <img src="logo-white.svg" alt="Logo White">
-
 
 </footer>
 
@@ -300,66 +297,35 @@
     
     // Generate random text
     for (let i = 0; i < 3200; i++) {
-      randomText += alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+            randomText += alphabet.charAt(Math.floor(Math.random() * alphabet.length));
     }
 
-    // Insert punctuation and spaces randomly into the random text
+    // Insert punctuation randomly in the text
     randomText = insertPunctuationRandomly(randomText);
 
-    // Insert the search term randomly in the random text
+    // Insert the search term randomly
     randomText = insertRandomly(randomText, query);
 
-    // Display the book title, page number, and generated text
-    const bookResultDiv = document.getElementById('book-result');
-    bookResultDiv.innerHTML = `<span class="book-title">Title: ${title}</span><br>
-                               <span class="book-page">Page: ${page}</span><br>
-                               <br>
-                               ${randomText}`;
+    const bookTextContainer = document.getElementById('book-result');
+    bookTextContainer.innerHTML = `<h2>Title: ${title}</h2><p>Page: ${page}</p><p>${randomText}</p>`;
   }
 
-  // Function to search and display results
+  // Function to handle the search and book generation
   function searchAndGenerateBook() {
-    const query = document.getElementById('search').value;
-    if (query) {
-      displayBookList(query);
+    const searchTerm = document.getElementById('search').value.trim().toLowerCase();
+
+    if (searchTerm) {
+      displayBookList(searchTerm);
     } else {
-      alert("Please enter a search term.");
+      document.getElementById('result').innerHTML = 'Please enter a search term.';
     }
   }
 
-  // Function to generate a random page of text
-  function generateRandomPage() {
-    const pageNumber = document.getElementById('page-number').value;
-    const query = document.getElementById('search').value;
-
-    if (pageNumber && query) {
-      let randomText = '';
-      
-      // Generate random text
-      for (let i = 0; i < 3200; i++) {
-        randomText += alphabet.charAt(Math.floor(Math.random() * alphabet.length));
-      }
-
-      // Insert punctuation and spaces randomly into the random text
-      randomText = insertPunctuationRandomly(randomText);
-
-      // Insert the search term randomly in the random text
-      randomText = insertRandomly(randomText, query);
-
-      // Display the generated page text
-      const bookResultDiv = document.getElementById('book-result');
-      bookResultDiv.innerHTML = `<span class="book-title">Random Page: ${pageNumber}</span><br>
-                                 <div class="highlight">Generated Text:</div><br>
-                                 ${randomText}`;
-    } else {
-      alert("Please enter a page number and search term.");
-    }
-  }
-
-  // Function to toggle menu visibility
+  // Function to toggle the menu
   function toggleMenu() {
     const menu = document.getElementById('menu');
     const menuIcon = document.querySelector('.menu-icon');
+
     if (menu.style.display === 'block') {
       menu.style.display = 'none';
       menuIcon.classList.remove('open');
@@ -369,10 +335,13 @@
     }
   }
 
-  // Fake link for menu items
-  function fakeLink(text) {
-    alert(`Life is ${text}`);
+  // Function to handle fake links in the menu
+  function fakeLink(action) {
+    alert(`Life Is ${action}`);
+    toggleMenu();
   }
 </script>
+
 </body>
 </html>
+
