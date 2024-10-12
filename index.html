@@ -203,6 +203,7 @@
 <div id="menu" class="nav-menu">
   <button onclick="fakeLink('Change')">Today</button>
   <button onclick="fakeLink('About')">About</button>
+  <button onclick="fakeLink('Library')">Books</button> <!-- Nuevo botón -->
 </div>
 
 <div class="container">
@@ -360,12 +361,11 @@
     } else if (action === 'About') {
       // Redirigir a about.html
       window.location.href = 'about.html';
+    } else if (action === 'Library') {
+      // Redirigir a library.html
+      window.location.href = 'library.html';
     }
   }
 </script>
-
-
-
-
 </body>
 </html>

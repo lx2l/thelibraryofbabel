@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Library of Babel</title>
+    <link rel="icon" href="icon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Serif', serif;
+            margin: 0;
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+
+        #header {
+            display: flex;
+            justify-content: flex-end; /* Alineación a la derecha */
+            width: 100%; /* Ancho completo */
+            padding: 10px; /* Espaciado */
+        }
+
+        #main-title {
+            font-size: 24px;
+            margin-right: 20px;
+        }
+
+        #boxes-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Columas flexibles para mejor adaptabilidad */
+            gap: 20px; /* Espaciado entre cuadros */
+            width: 80%;
+            max-width: 800px; /* Máxima anchura del contenedor */
+        }
+
+        .center-box {
+            padding: 30px;
+            border-radius: 10px;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            background-color: white; /* Fondo blanco inicial */
+        }
+
+        .center-box img {
+            width: 60px;
+            height: 60px;
+        }
+
+        .center-box h5 {
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .center-box h1 {
+            font-size: 22px;
+            margin: 5px 0 0 0;
+        }
+
+        #book-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            background-color: white; /* Fondo blanco */
+            border: 2px solid #444; /* Borde para el contenedor */
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para el contenedor */
+            max-width: 90%; /* Max width for smaller screens */
+            overflow: hidden; /* Evitar desbordamiento */
+        }
+
+        #generated-text {
+            white-space: pre-wrap;
+            text-align: left;
+            margin: 20px auto;
+            width: 100%; /* Ancho completo */
+            font-size: 16px;
+            line-height: 1.5;
+            height: 300px;
+            overflow-y: auto;
+        }
+
+        #page-title {
+            font-size: 18px;
+            margin-top: 10px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .navigation {
+            margin-top: 10px;
+        }
+
+        .nav-button {
+            font-size: 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin: 0 20px;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8); /* Fondo blanco semitransparente */
+            display: none;
+            z-index: 5;
+        }
+
+        /* Ajustes adicionales para mejorar la visualización en móviles */
+        @media (max-width: 600px) {
+            .center-box h1 {
+                font-size: 18px; /* Tamaño de fuente más pequeño para dispositivos móviles */
+            }
+
+            .nav-button {
+                font-size: 16px; /* Tamaño de botón más pequeño para dispositivos móviles */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="header">
+        <img src="today.svg" alt="Logo" style="width: 64px; height: 64px;"> <!-- Tamaño reducido -->
+    </div>
+
+    <div id="boxes-container"></div>
+
+    <div class="overlay" id="overlay"></div>
+    <div id="book-container">
+        <div id="generated-text"></div>
+        <div id="page-title"></div>
+        <div class="navigation">
+            <button id="prev-page" class="nav-button">◀</button>
+            <span id="page-info">Page 1</span>
+            <button id="next-page" class="nav-button">▶</button>
+        </div>
+        <button id="close-button" class="nav-button">✖</button>
+    </div>
+
+ <script>
+const colors = ['#9EE09E', '#9CC7C4', '#D9A6A8', '#E6D1C1'];
+const boxesCount = 18; // Establecer la cantidad de cuadros a 18
+const texts = {};
+let currentPage = 1;
+let selectedBoxIndex = null;
+
+// Function to generate random title (without numbers)
+function generateRandomTitle() {
+    const letters = 'abcdefghijklmnopqrstuvwxyz'; // Solo letras
+    let title = '';
+    const titleLength = Math.floor(Math.random() * 6 + 3); // Longitud del título entre 3 y 8 caracteres
+
+    for (let i = 0; i < titleLength; i++) {
+        title += letters.charAt(Math.floor(Math.random() * letters.length)).toUpperCase(); // Mayúsculas
+    }
+
+    return title;
+}
+
+// Function to generate random text with letters, spaces, commas, and periods
+function generateRandomText() {
+    const characters = 'abcdefghijklmnopqrstuvwxyz ';
+    const punctuation = ',. ';
+    let text = '';
+
+    for (let i = 0; i < 40; i++) {
+        let line = '';
+        for (let j = 0; j < Math.floor(Math.random() * 50 + 20); j++) {
+            if (Math.random() < 0.1) {
+                line += punctuation.charAt(Math.floor(Math.random() * punctuation.length));
+            } else {
+                line += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+        }
+        text += line.trim() + '\n';
+    }
+    return text;
+}
+
+// Function to create boxes with random titles and colors
+function createBoxes() {
+    const container = document.getElementById('boxes-container');
+    for (let i = 0; i < boxesCount; i++) {
+        const box = document.createElement('div');
+        box.classList.add('center-box');
+        box.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        const title = generateRandomTitle();
+        box.innerHTML = `
+            <h5>"The Library Of Babel"</h5>
+            <h1>${title}</h1>
+        `;
+        box.addEventListener('click', function () {
+            selectedBoxIndex = i;
+            currentPage = 1; // Reset to page 1 for this box
+            showGeneratedText(title);
+        });
+        container.appendChild(box);
+    }
+}
+
+// Show generated text, page number, and random title in the center
+function showGeneratedText(title) {
+    document.getElementById('overlay').style.display = 'block'; // Mostrar fondo
+    document.getElementById('book-container').style.display = 'flex'; // Mostrar contenedor del libro
+
+    if (!texts[selectedBoxIndex]) {
+        texts[selectedBoxIndex] = {
+            content: generateRandomText(),
+            pageTitle: title,
+            pages: [generateRandomText()] // Almacenar texto en la página 1
+        };
+    }
+
+    // Actualizar texto y título
+    document.getElementById('generated-text').innerText = texts[selectedBoxIndex].pages[currentPage - 1];
+    document.getElementById('page-title').innerText = title;
+    document.getElementById('page-info').innerText = `Page ${currentPage}`;
+}
+
+// Navigation buttons logic
+document.getElementById('prev-page').addEventListener('click', function () {
+    if (currentPage > 1) {
+        currentPage--;
+        showGeneratedText(texts[selectedBoxIndex].pageTitle);
+    }
+});
+
+document.getElementById('next-page').addEventListener('click', function () {
+    if (!texts[selectedBoxIndex].pages[currentPage]) {
+        texts[selectedBoxIndex].pages[currentPage] = generateRandomText(); // Generar nuevo texto si no existe
+    }
+    currentPage++;
+    showGeneratedText(texts[selectedBoxIndex].pageTitle);
+});
+
+// Close button logic
+document.getElementById('close-button').addEventListener('click', function () {
+    document.getElementById('overlay').style.display = 'none'; // Ocultar fondo
+    document.getElementById('book-container').style.display = 'none'; // Ocultar contenedor del libro
+});
+
+// Load initial settings
+window.onload = function () {
+    createBoxes(); // Crear cuadros al cargar la página
+};
+</script>
+
+</body>
+</html>
