@@ -141,7 +141,7 @@
 </head>
 <body>
     <div id="header">
-        <img src="today.svg" alt="Logo" style="width: 64px; height: 64px;"> <!-- Tamaño reducido -->
+        <img src="today.svg" alt="Logo" style="width: 54px; height: 54px;"> <!-- Tamaño reducido -->
     </div>
 
     <div id="boxes-container"></div>
@@ -160,30 +160,25 @@
 
  <script>
 const colors = ['#9EE09E', '#9CC7C4', '#D9A6A8', '#E6D1C1'];
-const boxesCount = 18; // Establecer la cantidad de cuadros a 18
+const boxesCount = 18;
 const texts = {};
 let currentPage = 1;
 let selectedBoxIndex = null;
 
-// Function to generate random title (without numbers)
 function generateRandomTitle() {
-    const letters = 'abcdefghijklmnopqrstuvwxyz'; // Solo letras
+    const letters = 'abcdefghijklmnopqrstuvwxyz';
     let title = '';
-    const titleLength = Math.floor(Math.random() * 6 + 3); // Longitud del título entre 3 y 8 caracteres
-
+    const titleLength = Math.floor(Math.random() * 6 + 3);
     for (let i = 0; i < titleLength; i++) {
-        title += letters.charAt(Math.floor(Math.random() * letters.length)).toUpperCase(); // Mayúsculas
+        title += letters.charAt(Math.floor(Math.random() * letters.length)).toUpperCase();
     }
-
     return title;
 }
 
-// Function to generate random text with letters, spaces, commas, and periods
 function generateRandomText() {
     const characters = 'abcdefghijklmnopqrstuvwxyz ';
     const punctuation = ',. ';
     let text = '';
-
     for (let i = 0; i < 40; i++) {
         let line = '';
         for (let j = 0; j < Math.floor(Math.random() * 50 + 20); j++) {
@@ -198,7 +193,6 @@ function generateRandomText() {
     return text;
 }
 
-// Function to create boxes with random titles and colors
 function createBoxes() {
     const container = document.getElementById('boxes-container');
     for (let i = 0; i < boxesCount; i++) {
@@ -212,33 +206,30 @@ function createBoxes() {
         `;
         box.addEventListener('click', function () {
             selectedBoxIndex = i;
-            currentPage = 1; // Reset to page 1 for this box
+            currentPage = 1;
             showGeneratedText(title);
         });
         container.appendChild(box);
     }
 }
 
-// Show generated text, page number, and random title in the center
 function showGeneratedText(title) {
-    document.getElementById('overlay').style.display = 'block'; // Mostrar fondo
-    document.getElementById('book-container').style.display = 'flex'; // Mostrar contenedor del libro
+    document.getElementById('overlay').style.display = 'block';
+    document.getElementById('book-container').style.display = 'flex';
 
     if (!texts[selectedBoxIndex]) {
         texts[selectedBoxIndex] = {
             content: generateRandomText(),
             pageTitle: title,
-            pages: [generateRandomText()] // Almacenar texto en la página 1
+            pages: [generateRandomText()]
         };
     }
 
-    // Actualizar texto y título
     document.getElementById('generated-text').innerText = texts[selectedBoxIndex].pages[currentPage - 1];
     document.getElementById('page-title').innerText = title;
     document.getElementById('page-info').innerText = `Page ${currentPage}`;
 }
 
-// Navigation buttons logic
 document.getElementById('prev-page').addEventListener('click', function () {
     if (currentPage > 1) {
         currentPage--;
@@ -248,23 +239,28 @@ document.getElementById('prev-page').addEventListener('click', function () {
 
 document.getElementById('next-page').addEventListener('click', function () {
     if (!texts[selectedBoxIndex].pages[currentPage]) {
-        texts[selectedBoxIndex].pages[currentPage] = generateRandomText(); // Generar nuevo texto si no existe
+        texts[selectedBoxIndex].pages[currentPage] = generateRandomText();
     }
     currentPage++;
     showGeneratedText(texts[selectedBoxIndex].pageTitle);
 });
 
-// Close button logic
 document.getElementById('close-button').addEventListener('click', function () {
-    document.getElementById('overlay').style.display = 'none'; // Ocultar fondo
-    document.getElementById('book-container').style.display = 'none'; // Ocultar contenedor del libro
+    document.getElementById('overlay').style.display = 'none';
+    document.getElementById('book-container').style.display = 'none';
+});
+
+// Redirigir al hacer clic en el SVG
+document.querySelector('#header img').addEventListener('click', function() {
+    window.location.href = 'index.html'; // Cambia 'index.html' por la ruta de tu archivo si es diferente
 });
 
 // Load initial settings
 window.onload = function () {
-    createBoxes(); // Crear cuadros al cargar la página
+    createBoxes();
 };
 </script>
+
 
 </body>
 </html>
