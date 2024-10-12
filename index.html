@@ -235,6 +235,8 @@
 <script>
   const alphabet = "abcdefghijklmnopqrstuvwxyz"; // Solo letras
   let generatedBooks = {}; // Objeto para almacenar los libros generados
+  let previousSearchTerm = ''; // Variable para almacenar el término de búsqueda anterior
+  let previousBookList = []; // Variable para almacenar la lista de libros generada anteriormente
 
   // Function to generate a random title
   function generateRandomTitle() {
@@ -277,17 +279,26 @@
     const bookListContainer = document.getElementById('book-list');
     bookListContainer.innerHTML = ''; // Clear previous results
 
-    const numBooks = Math.floor(Math.random() * 23) + 1; // Generate between 1 and 23 books
+    if (previousSearchTerm === query && previousBookList.length > 0) {
+      // Si el término de búsqueda es el mismo y ya hay una lista generada, mostrar la lista anterior
+      previousBookList.forEach(bookItem => bookListContainer.appendChild(bookItem));
+    } else {
+      previousSearchTerm = query; // Actualizar el término de búsqueda
+      previousBookList = []; // Limpiar la lista anterior
 
-    for (let i = 0; i < numBooks; i++) {
-      const title = generateRandomTitle();
-      const page = Math.floor(Math.random() * 1000) + 1; // Random page number between 1 and 1000
+      const numBooks = Math.floor(Math.random() * 23) + 1; // Generate between 1 and 23 books
 
-      const bookItem = document.createElement('div');
-      bookItem.className = 'book-list-item';
-      bookItem.innerHTML = `Title: ${title}, Page: ${page}`;
-      bookItem.onclick = () => showBookText(title, page, query); // Show text on click
-      bookListContainer.appendChild(bookItem);
+      for (let i = 0; i < numBooks; i++) {
+        const title = generateRandomTitle();
+        const page = Math.floor(Math.random() * 1000) + 1; // Random page number between 1 and 1000
+
+        const bookItem = document.createElement('div');
+        bookItem.className = 'book-list-item';
+        bookItem.innerHTML = `Title: ${title}, Page: ${page}`;
+        bookItem.onclick = () => showBookText(title, page, query); // Show text on click
+        bookListContainer.appendChild(bookItem);
+        previousBookList.push(bookItem); // Guardar el elemento generado
+      }
     }
   }
 
