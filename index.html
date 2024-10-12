@@ -309,8 +309,20 @@
   // Function to generate book content based on title and page
   function generateBookContent(title, page, term) {
     const bookResult = document.getElementById('book-result');
-    const randomText = insertPunctuationRandomly("Lorem ipsum dolor sit amet consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.");
-    bookResult.innerHTML = `<h2 class="book-title">${title}</h2><p class="book-page">Page: ${page}</p><p class="book-text">${insertRandomly(randomText, term)}</p>`;
+
+    // Check if the book content has already been generated
+    if (generatedBooks[title]) {
+      // If it exists, display the stored content
+      bookResult.innerHTML = generatedBooks[title];
+    } else {
+      // If not, generate new content
+      const randomText = insertPunctuationRandomly("Lorem ipsum dolor sit amet consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.");
+      const content = `<h2 class="book-title">${title}</h2><p class="book-page">Page: ${page}</p><p class="book-text">${insertRandomly(randomText, term)}</p>`;
+      
+      // Store the generated content
+      generatedBooks[title] = content;
+      bookResult.innerHTML = content;
+    }
   }
 
   // Function to search and generate the book list
@@ -341,6 +353,7 @@
     }
   }
 </script>
+
 
 </body>
 </html>
