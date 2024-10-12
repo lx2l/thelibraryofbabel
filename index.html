@@ -234,6 +234,7 @@
 
 <script>
   const alphabet = "abcdefghijklmnopqrstuvwxyz"; // Solo letras
+  let generatedBooks = {}; // Objeto para almacenar los libros generados
 
   // Function to generate a random title
   function generateRandomTitle() {
@@ -268,11 +269,10 @@
   // Function to insert the search term randomly in a string
   function insertRandomly(text, term) {
     const position = Math.floor(Math.random() * text.length);
-    // Modificar la forma en que se inserta el término para que esté en negrita e itálica
     return text.slice(0, position) + `<span style="font-weight: bold; font-style: italic;">${term}</span>` + text.slice(position);
   }
 
-  // Function to display a random book result
+  // Function to display a random book list
   function displayBookList(query) {
     const bookListContainer = document.getElementById('book-list');
     bookListContainer.innerHTML = ''; // Clear previous results
@@ -293,18 +293,24 @@
 
   // Function to generate and highlight text for a selected book
   function showBookText(title, page, query) {
-    let randomText = '';
-    
-    // Generate random text
-    for (let i = 0; i < 3200; i++) {
-            randomText += alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+    const bookKey = `${title}_${page}`; // Unique key for the book
+    let randomText = generatedBooks[bookKey]; // Check if the book was already generated
+
+    // If the book has not been generated before, create the text
+    if (!randomText) {
+      randomText = '';
+      // Generate random text
+      for (let i = 0; i < 3200; i++) {
+        randomText += alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+      }
+
+      // Insert punctuation and search term
+      randomText = insertPunctuationRandomly(randomText);
+      randomText = insertRandomly(randomText, query);
+
+      // Store the generated text in the object
+      generatedBooks[bookKey] = randomText;
     }
-
-    // Insert punctuation randomly in the text
-    randomText = insertPunctuationRandomly(randomText);
-
-    // Insert the search term randomly
-    randomText = insertRandomly(randomText, query);
 
     const bookTextContainer = document.getElementById('book-result');
     bookTextContainer.innerHTML = `<h2>Title: ${title}</h2><p>Page: ${page}</p><p>${randomText}</p>`;
