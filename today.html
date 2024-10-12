@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Library of Babel</title>
-  <link rel="icon" href="icon.png">
+    <link rel="icon" href="icon.png">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <style>
         body {
@@ -19,24 +19,37 @@
         }
 
         .center-box {
-            width: 300px;
-            padding: 20px;
+            width: 320px;
+            padding: 30px;
             background-color: #9EE09E;
             border-radius: 10px;
             transition: background-color 0.3s ease;
-            cursor: pointer; /* Cambiar el cursor al pasar sobre el cuadro */
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .center-box img {
+            width: 60px; /* Ajuste de tamaño de la imagen */
+            height: 60px;
         }
 
         .center-box h5 {
-            font-size: 12px;
+            font-size: 14px;
             margin: 0;
-            padding: 0;
         }
 
         .center-box h1 {
-            font-size: 24px;
-            margin: 10px 0 0 0;
-            padding: 0;
+            font-size: 22px;
+            margin: 5px 0 0 0;
+        }
+
+        .center-box #random-text {
+            margin-top: 10px;
+            font-size: 18px;
+            color: #444;
         }
 
         .content {
@@ -74,7 +87,7 @@
 </head>
 <body>
     <div class="center-box" id="center-box">
-      <img src="today.svg" alt="Logo">
+        <img src="today.svg" alt="Logo">
         <h5>"The Library Of Babel"</h5>
         <h1>Today's selection</h1>
         <h1 id="random-text">Random Title</h1>
@@ -96,12 +109,10 @@
         let currentPage = 1;
         let mainTitle = '';
 
-        // Function to generate random title
         function generateRandomTitle() {
             return Math.random().toString(36).substring(2, 10).toUpperCase();
         }
 
-        // Function to generate random text with letters, spaces, commas, and periods
         function generateRandomText() {
             const characters = 'abcdefghijklmnopqrstuvwxyz ';
             const punctuation = ',. ';
@@ -121,20 +132,17 @@
             return text;
         }
 
-        // Change background color randomly on page load
         function changeBackgroundColor() {
             const randomColor = colors[Math.floor(Math.random() * colors.length)];
             document.getElementById('center-box').style.backgroundColor = randomColor;
         }
 
-        // Show generated text, page number, and random title
         function showGeneratedText() {
             document.getElementById('content').classList.remove('hidden');
             document.getElementById('center-box').classList.add('hidden');
 
             if (!texts[currentPage]) {
                 if (currentPage === 1) {
-                    // Generate the main title only on the first page
                     mainTitle = generateRandomTitle();
                 }
                 texts[currentPage] = {
@@ -148,12 +156,10 @@
             document.getElementById('page-title').innerText = mainTitle;
         }
 
-        // Event listener for clicking on the center box
         document.getElementById('center-box').addEventListener('click', function () {
             showGeneratedText();
         });
 
-        // Navigation buttons logic
         document.getElementById('prev-page').addEventListener('click', function () {
             if (currentPage > 1) {
                 currentPage--;
@@ -166,10 +172,9 @@
             showGeneratedText();
         });
 
-        // Load initial settings
         window.onload = function () {
             changeBackgroundColor();
-            document.getElementById('random-text').innerText = mainTitle; // Muestra el título vacío por ahora
+            document.getElementById('random-text').innerText = mainTitle;
         };
     </script>
 </body>
