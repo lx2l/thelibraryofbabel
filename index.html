@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Library Of Babel</title>
+  <link rel="icon" href="icon.png">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap');
+
+    body {
+      font-family: 'Noto Serif', sans-serif;
+      background-color: #ffffff;
+      color: #000000;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      padding: 20px;
+      background-color: #f5f5f5;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      position: relative;
+    }
+
+    img {
+      width: 150px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin: 10px;
+      background-color: #000000;
+      color: #ffffff;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #333333;
+    }
+
+    .book-text {
+      text-align: left;
+      margin-top: 20px;
+      background-color: #F5F5F5;
+      padding: 20px;
+      border-radius: 8px;
+      height: 200px;
+      overflow-y: auto;
+    }
+
+    .search-box {
+      margin-top: 30px;
+    }
+
+    input[type="text"], input[type="number"] {
+      padding: 10px;
+      width: 80%;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    .highlight {
+      font-weight: bold;
+      color: #000;
+    }
+
+    .book-title {
+      font-weight: bold;
+      color: #000;
+    }
+
+    .book-page {
+      color: #000;
+    }
+
+    .result {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+
+    /* Footer Styles */
+    footer {
+      background-color: #000000;
+      color: #ffffff;
+      padding: 20px 0;
+      text-align: center;
+      position: relative;
+      bottom: 0;
+      width: 100%;
+      margin-top: 40px;
+    }
+
+    footer p {
+      margin: 5px 0;
+    }
+
+    footer a {
+      color: #ffffff;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Menu Icon Styles */
+    .menu-icon {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      cursor: pointer;
+      display: inline-block;
+      width: 30px;
+      height: 24px;
+    }
+
+    .menu-icon .line {
+      width: 100%;
+      height: 4px;
+      background-color: #000000;
+      margin: 5px 0;
+      transition: all 0.3s ease;
+    }
+
+    .menu-icon.open .line:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    .menu-icon.open .line:nth-child(2) {
+      opacity: 0;
+    }
+
+    .menu-icon.open .line:nth-child(3) {
+      transform: rotate(-45deg) translate(5px, -5px);
+    }
+
+    /* Hidden by default */
+    .nav-menu {
+      display: none;
+      position: absolute;
+      top: 60px;
+      right: 20px;
+      background-color: #ffffff;
+      border: 1px solid #000000;
+      border-radius: 8px;
+      padding: 10px;
+    }
+
+    .nav-menu button {
+      display: block;
+      background-color: #FFD514;
+      color: #000000;
+      border: none;
+      padding: 10px;
+      margin: 5px 0;
+      cursor: pointer;
+      width: 100px;
+    }
+
+    .nav-menu button:hover {
+      background-color: #333333;
+    }
+
+    /* Book List Styles */
+    .book-list {
+      margin-top: 20px;
+      text-align: left;
+    }
+
+    .book-list-item {
+      cursor: pointer;
+      margin: 5px 0;
+    }
+
+    .book-list-item:hover {
+      text-decoration: underline;
+      color: #0000FF;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="menu-icon" onclick="toggleMenu()">
+    <div class="line"></div>
+    <div class="line"></div>
+    <div class="line"></div>
+  </div>
+
+  <img src="logo.svg" alt="Library Logo">
+</header>
+
+<div id="menu" class="nav-menu">
+  <button onclick="fakeLink('Change')">Change</button>
+  <button onclick="fakeLink('Connection')">Connection</button>
+  <button onclick="fakeLink('Growth')">Growth</button>
+</div>
+
+<div class="container">
+  <h1>Welcome to The Library of Babel</h1>
+  <p>Search for your desired text and explore the pages of the book where it might appear.</p>
+
+  <div class="search-box">
+    <input type="text" id="search" placeholder="Search within the books...">
+  </div>
+  
+  <button onclick="searchAndGenerateBook()">Find Book</button>
+
+  <div class="result" id="result"></div>
+
+  <div id="book-result" class="book-text"></div>
+
+  
+
+  <div class="book-list" id="book-list"></div> <!-- Lista de libros -->
+
+</div>
+
+<footer>
+  <p>&copy Inspired by the Library of Babel by Jorge Luis Borges. Page created by Jared López </p>
+<img src="logo-white.svg" alt="Logo White">
+</footer>
+
+<script>
+  const alphabet = "abcdefghijklmnopqrstuvwxyz"; // Solo letras
+
+  // Function to generate a random title
+  function generateRandomTitle() {
+    let title = '';
+    for (let i = 0; i < 10; i++) {
+      title += alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+    }
+    return title.toUpperCase();
+  }
+
+  // Function to insert spaces, periods, and commas randomly in the text
+  function insertPunctuationRandomly(text) {
+    const spaceProbability = 0.1; // Probabilidad de insertar un espacio
+    const punctuationProbability = 0.05; // Probabilidad de insertar una coma o punto
+    const punctuationMarks = [',', '.']; // Puntuaciones disponibles
+    let result = '';
+
+    for (let char of text) {
+      result += char;
+      // Decide aleatoriamente si agregar un espacio
+      if (Math.random() < spaceProbability) {
+        result += ' ';
+      }
+      // Decide aleatoriamente si agregar puntuación
+      if (Math.random() < punctuationProbability) {
+        result += punctuationMarks[Math.floor(Math.random() * punctuationMarks.length)];
+      }
+    }
+    return result;
+  }
+
+  // Function to insert the search term randomly in a string
+  function insertRandomly(text, term) {
+    const position = Math.floor(Math.random() * text.length);
+    // Modificar la forma en que se inserta el término para que esté en negrita e itálica
+    return text.slice(0, position) + `<span style="font-weight: bold; font-style: italic;">${term}</span>` + text.slice(position);
+  }
+
+  // Function to display a random book result
+  function displayBookList(query) {
+    const bookListContainer = document.getElementById('book-list');
+    bookListContainer.innerHTML = ''; // Clear previous results
+
+    const numBooks = Math.floor(Math.random() * 23) + 1; // Generate between 1 and 23 books
+
+    for (let i = 0; i < numBooks; i++) {
+      const title = generateRandomTitle();
+      const page = Math.floor(Math.random() * 1000) + 1; // Random page number between 1 and 1000
+
+      const bookItem = document.createElement('div');
+      bookItem.className = 'book-list-item';
+      bookItem.innerHTML = `Title: ${title}, Page: ${page}`;
+      bookItem.onclick = () => showBookText(title, page, query); // Show text on click
+      bookListContainer.appendChild(bookItem);
+    }
+  }
+
+  // Function to generate and highlight text for a selected book
+  function showBookText(title, page, query) {
+    let randomText = '';
+    
+    // Generate random text
+    for (let i = 0; i < 3200; i++) {
+      randomText += alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+    }
+
+    // Insert punctuation and spaces randomly into the random text
+    randomText = insertPunctuationRandomly(randomText);
+
+    // Insert the search term randomly in the random text
+    randomText = insertRandomly(randomText, query);
+
+    // Display the book title, page number, and generated text
+    const bookResultDiv = document.getElementById('book-result');
+    bookResultDiv.innerHTML = `<span class="book-title">Title: ${title}</span><br>
+                               <span class="book-page">Page: ${page}</span><br>
+                               <br>
+                               ${randomText}`;
+  }
+
+  // Function to search and display results
+  function searchAndGenerateBook() {
+    const query = document.getElementById('search').value;
+    if (query) {
+      displayBookList(query);
+    } else {
+      alert("Please enter a search term.");
+    }
+  }
+
+  // Function to generate a random page of text
+  function generateRandomPage() {
+    const pageNumber = document.getElementById('page-number').value;
+    const query = document.getElementById('search').value;
+
+    if (pageNumber && query) {
+      let randomText = '';
+      
+      // Generate random text
+      for (let i = 0; i < 3200; i++) {
+        randomText += alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+      }
+
+      // Insert punctuation and spaces randomly into the random text
+      randomText = insertPunctuationRandomly(randomText);
+
+      // Insert the search term randomly in the random text
+      randomText = insertRandomly(randomText, query);
+
+      // Display the generated page text
+      const bookResultDiv = document.getElementById('book-result');
+      bookResultDiv.innerHTML = `<span class="book-title">Random Page: ${pageNumber}</span><br>
+                                 <div class="highlight">Generated Text:</div><br>
+                                 ${randomText}`;
+    } else {
+      alert("Please enter a page number and search term.");
+    }
+  }
+
+  // Function to toggle menu visibility
+  function toggleMenu() {
+    const menu = document.getElementById('menu');
+    const menuIcon = document.querySelector('.menu-icon');
+    if (menu.style.display === 'block') {
+      menu.style.display = 'none';
+      menuIcon.classList.remove('open');
+    } else {
+      menu.style.display = 'block';
+      menuIcon.classList.add('open');
+    }
+  }
+
+  // Fake link for menu items
+  function fakeLink(text) {
+    alert(`You clicked ${text}`);
+  }
+</script>
+</body>
+</html>
