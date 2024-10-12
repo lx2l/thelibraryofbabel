@@ -246,6 +246,16 @@
     return title.toUpperCase();
   }
 
+  // Function to generate a random string of text
+  function generateRandomText(length) {
+    const characters = alphabet + " "; // Usaremos letras y espacios
+    let result = '';
+    for (let i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return result;
+  }
+
   // Function to insert spaces, periods, and commas randomly in the text
   function insertPunctuationRandomly(text) {
     const spaceProbability = 0.1; // Probabilidad de insertar un espacio
@@ -316,7 +326,7 @@
       bookResult.innerHTML = generatedBooks[title];
     } else {
       // If not, generate new content
-      const randomText = insertPunctuationRandomly("Lorem ipsum dolor sit amet consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.");
+      const randomText = insertPunctuationRandomly(generateRandomText(500)); // Generate 500 random characters
       const content = `<h2 class="book-title">${title}</h2><p class="book-page">Page: ${page}</p><p class="book-text">${insertRandomly(randomText, term)}</p>`;
       
       // Store the generated content
@@ -353,6 +363,7 @@
     }
   }
 </script>
+
 
 
 </body>
