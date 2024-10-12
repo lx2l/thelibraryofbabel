@@ -201,9 +201,8 @@
 </header>
 
 <div id="menu" class="nav-menu">
-  <button onclick="fakeLink('Change')">Change</button>
-  <button onclick="fakeLink('Connection')">Connection</button>
-  <button onclick="fakeLink('Growth')">Growth</button>
+  <button onclick="fakeLink('Change')">Today</button>
+  <button onclick="fakeLink('About')">About</button>
 </div>
 
 <div class="container">
@@ -294,47 +293,31 @@
 
         const bookItem = document.createElement('div');
         bookItem.className = 'book-list-item';
-        bookItem.innerHTML = `Title: ${title}, Page: ${page}`;
-        bookItem.onclick = () => showBookText(title, page, query); // Show text on click
-        bookListContainer.appendChild(bookItem);
-        previousBookList.push(bookItem); // Guardar el elemento generado
+        bookItem.innerText = `Title: ${title}, Page: ${page}`;
+        
+        // Al hacer clic, se generará el texto del libro
+        bookItem.onclick = () => {
+          generateBookContent(title, page, query);
+        };
+
+        previousBookList.push(bookItem); // Almacenar el libro en la lista anterior
+        bookListContainer.appendChild(bookItem); // Agregar a la lista
       }
     }
   }
 
-  // Function to generate and highlight text for a selected book
-  function showBookText(title, page, query) {
-    const bookKey = `${title}_${page}`; // Unique key for the book
-    let randomText = generatedBooks[bookKey]; // Check if the book was already generated
-
-    // If the book has not been generated before, create the text
-    if (!randomText) {
-      randomText = '';
-      // Generate random text
-      for (let i = 0; i < 3200; i++) {
-        randomText += alphabet.charAt(Math.floor(Math.random() * alphabet.length));
-      }
-
-      // Insert punctuation and search term
-      randomText = insertPunctuationRandomly(randomText);
-      randomText = insertRandomly(randomText, query);
-
-      // Store the generated text in the object
-      generatedBooks[bookKey] = randomText;
-    }
-
-    const bookTextContainer = document.getElementById('book-result');
-    bookTextContainer.innerHTML = `<h2>Title: ${title}</h2><p>Page: ${page}</p><p>${randomText}</p>`;
+  // Function to generate book content based on title and page
+  function generateBookContent(title, page, term) {
+    const bookResult = document.getElementById('book-result');
+    const randomText = insertPunctuationRandomly("Lorem ipsum dolor sit amet consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.");
+    bookResult.innerHTML = `<h2 class="book-title">${title}</h2><p class="book-page">Page: ${page}</p><p class="book-text">${insertRandomly(randomText, term)}</p>`;
   }
 
-  // Function to handle the search and book generation
+  // Function to search and generate the book list
   function searchAndGenerateBook() {
-    const searchTerm = document.getElementById('search').value.trim().toLowerCase();
-
-    if (searchTerm) {
-      displayBookList(searchTerm);
-    } else {
-      document.getElementById('result').innerHTML = 'Please enter a search term.';
+    const query = document.getElementById('search').value;
+    if (query) {
+      displayBookList(query);
     }
   }
 
@@ -342,23 +325,22 @@
   function toggleMenu() {
     const menu = document.getElementById('menu');
     const menuIcon = document.querySelector('.menu-icon');
-
-    if (menu.style.display === 'block') {
-      menu.style.display = 'none';
-      menuIcon.classList.remove('open');
-    } else {
-      menu.style.display = 'block';
-      menuIcon.classList.add('open');
-    }
+    menu.classList.toggle('open');
+    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+    menuIcon.classList.toggle('open');
   }
 
-  // Function to handle fake links in the menu
+  // Function to handle the fake link
   function fakeLink(action) {
-    alert(`Life Is ${action}`);
-    toggleMenu();
+    if (action === 'Change') {
+      // Redirigir a today.html
+      window.location.href = 'today.html';
+    } else if (action === 'About') {
+      // Redirigir a about.html
+      window.location.href = 'about.html';
+    }
   }
 </script>
 
 </body>
 </html>
-
