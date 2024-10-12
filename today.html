@@ -21,7 +21,7 @@
         .center-box {
             width: 320px;
             padding: 30px;
-            background-color: #9EE09E;
+            background-color: white; /* Fondo blanco inicial */
             border-radius: 10px;
             transition: background-color 0.3s ease;
             cursor: pointer;
@@ -32,7 +32,7 @@
         }
 
         .center-box img {
-            width: 60px; /* Ajuste de tamaño de la imagen */
+            width: 60px;
             height: 60px;
         }
 
@@ -109,10 +109,20 @@
         let currentPage = 1;
         let mainTitle = '';
 
+        // Function to generate random title (without numbers)
         function generateRandomTitle() {
-            return Math.random().toString(36).substring(2, 10).toUpperCase();
+            const letters = 'abcdefghijklmnopqrstuvwxyz'; // Solo letras
+            let title = '';
+            const titleLength = Math.floor(Math.random() * 6 + 3); // Longitud del título entre 3 y 8 caracteres
+
+            for (let i = 0; i < titleLength; i++) {
+                title += letters.charAt(Math.floor(Math.random() * letters.length)).toUpperCase(); // Mayúsculas
+            }
+
+            return title;
         }
 
+        // Function to generate random text with letters, spaces, commas, and periods
         function generateRandomText() {
             const characters = 'abcdefghijklmnopqrstuvwxyz ';
             const punctuation = ',. ';
@@ -132,18 +142,20 @@
             return text;
         }
 
+        // Change background color randomly on page load
         function changeBackgroundColor() {
             const randomColor = colors[Math.floor(Math.random() * colors.length)];
             document.getElementById('center-box').style.backgroundColor = randomColor;
         }
 
+        // Show generated text, page number, and random title
         function showGeneratedText() {
             document.getElementById('content').classList.remove('hidden');
             document.getElementById('center-box').classList.add('hidden');
 
             if (!texts[currentPage]) {
                 if (currentPage === 1) {
-                    mainTitle = generateRandomTitle();
+                    mainTitle = generateRandomTitle(); // Generar título sin números
                 }
                 texts[currentPage] = {
                     content: generateRandomText(),
@@ -156,10 +168,12 @@
             document.getElementById('page-title').innerText = mainTitle;
         }
 
+        // Event listener for clicking on the center box
         document.getElementById('center-box').addEventListener('click', function () {
             showGeneratedText();
         });
 
+        // Navigation buttons logic
         document.getElementById('prev-page').addEventListener('click', function () {
             if (currentPage > 1) {
                 currentPage--;
@@ -172,9 +186,10 @@
             showGeneratedText();
         });
 
+        // Load initial settings
         window.onload = function () {
-            changeBackgroundColor();
-            document.getElementById('random-text').innerText = mainTitle;
+            changeBackgroundColor(); // Cambiar el color de fondo al cargar la página
+            document.getElementById('random-text').innerText = mainTitle; // Título inicial vacío
         };
     </script>
 </body>
