@@ -82,54 +82,64 @@
         </div>
     </div>
 
-    <script>
-        function generateText() {
-            const room = document.getElementById("room").value;
-            const shelf = document.getElementById("shelf").value;
+<script>
+    function generateText() {
+        const room = document.getElementById("room").value;
+        const shelf = document.getElementById("shelf").value;
 
-            // Generar un título basado en habitación y estante
-            const title = `R:${room} S:${shelf}`;
-            const randomText = createPseudoRandomText(room, shelf);
-            
-            document.getElementById("title").innerText = title;
-            document.getElementById("generated-text").innerText = randomText;
-            document.getElementById("highlighted-text").innerText = "";
-            document.getElementById("letter-input").value = "";
+        // Generar un título basado en habitación y estante
+        const title = `R:${room} S:${shelf}`;
+        const randomText = createPseudoRandomText(room, shelf);
+        
+        document.getElementById("title").innerText = title;
+        document.getElementById("generated-text").innerText = randomText;
+        document.getElementById("highlighted-text").innerText = "";
+        document.getElementById("letter-input").value = "";
+    }
+
+    // Generador de números aleatorios basado en una semilla
+    function seededRandom(seed) {
+        const x = Math.sin(seed) * 10000;
+        return x - Math.floor(x);
+    }
+
+    function createPseudoRandomText(room, shelf) {
+        const textLength = 3200;
+        // Conjunto de caracteres, ahora incluye letras
+        const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,. '; // Conjunto de caracteres
+        let text = '';
+        // Crear una semilla combinando room y shelf
+        const seed = parseInt(room) + parseInt(shelf);
+
+        // Modificar el conjunto de caracteres basado en la entrada de la habitación
+        const roomChars = room.split('').map(c => c.toLowerCase()); // Convertir a minúsculas para consistencia
+        const uniqueRoomChars = [...new Set(roomChars)]; // Eliminar duplicados
+
+        // Incluir caracteres únicos de la habitación en el conjunto
+        const modifiedCharacters = characters + uniqueRoomChars.join('');
+
+        for (let i = 0; i < textLength; i++) {
+            // Usar la semilla y el índice para crear un carácter aleatorio
+            const randomIndex = Math.floor(seededRandom(seed + i) * modifiedCharacters.length);
+            text += modifiedCharacters[randomIndex];
         }
 
-        // Generador de números aleatorios basado en una semilla
-        function seededRandom(seed) {
-            const x = Math.sin(seed) * 10000;
-            return x - Math.floor(x);
-        }
+        return text;
+    }
 
-        function createPseudoRandomText(room, shelf) {
-            const textLength = 3200;
-            const characters = 'abcdefghijklmnopqrstuvwxyz,. '; // Conjunto de caracteres
-            let text = '';
-            const seed = parseInt(room) + parseInt(shelf); // Crear una semilla combinando room y shelf
-            
-            for (let i = 0; i < textLength; i++) {
-                // Usar la semilla y el índice para crear un carácter aleatorio
-                const randomIndex = Math.floor(seededRandom(seed + i) * characters.length);
-                text += characters[randomIndex];
+    function highlightLetters() {
+        const text = document.getElementById("generated-text").innerText;
+        const lettersToHighlight = document.getElementById("letter-input").value.split('');
+        const highlightedText = text.split('').map(char => {
+            if (lettersToHighlight.includes(char)) {
+                return `<span class="highlight">${char}</span>`;
             }
+            return char;
+        }).join('');
 
-            return text;
-        }
+        document.getElementById("highlighted-text").innerHTML = highlightedText;
+    }
+</script>
 
-        function highlightLetters() {
-            const text = document.getElementById("generated-text").innerText;
-            const lettersToHighlight = document.getElementById("letter-input").value.split('');
-            const highlightedText = text.split('').map(char => {
-                if (lettersToHighlight.includes(char)) {
-                    return `<span class="highlight">${char}</span>`;
-                }
-                return char;
-            }).join('');
-
-            document.getElementById("highlighted-text").innerHTML = highlightedText;
-        }
-    </script>
 </body>
 </html>
