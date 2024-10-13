@@ -64,6 +64,8 @@
         <div class="search-box">
             <input type="text" id="room" placeholder="Room" maxlength="4">
             <input type="text" id="shelf" placeholder="Shelf" maxlength="7">
+            <input type="text" id="book" placeholder="Book" maxlength="4"> <!-- Nuevo campo para Libro -->
+            <input type="text" id="page" placeholder="Page" maxlength="3"> <!-- Nuevo campo para Página -->
             <button onclick="generateText()">Take book</button>
         </div>
 
@@ -86,10 +88,12 @@
     function generateText() {
         const room = document.getElementById("room").value;
         const shelf = document.getElementById("shelf").value;
+        const book = document.getElementById("book").value; // Obtener valor de libro
+        const page = document.getElementById("page").value; // Obtener valor de página
 
-        // Generar un título basado en habitación y estante
-        const title = `R:${room} S:${shelf}`;
-        const randomText = createPseudoRandomText(room, shelf);
+        // Generar un título basado en habitación, estante, libro y página
+        const title = `R:${room} S:${shelf} B:${book} P:${page}`;
+        const randomText = createPseudoRandomText(room, shelf, book, page);
         
         document.getElementById("title").innerText = title;
         document.getElementById("generated-text").innerText = randomText;
@@ -103,13 +107,13 @@
         return x - Math.floor(x);
     }
 
-    function createPseudoRandomText(room, shelf) {
+    function createPseudoRandomText(room, shelf, book, page) {
         const textLength = 3200;
         // Conjunto de caracteres, ahora incluye letras
         const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,. '; // Conjunto de caracteres
         let text = '';
-        // Crear una semilla combinando room y shelf
-        const seed = parseInt(room) + parseInt(shelf);
+        // Crear una semilla combinando room, shelf, book y page
+        const seed = parseInt(room) + parseInt(shelf) + parseInt(book) + parseInt(page);
 
         // Modificar el conjunto de caracteres basado en la entrada de la habitación
         const roomChars = room.split('').map(c => c.toLowerCase()); // Convertir a minúsculas para consistencia
