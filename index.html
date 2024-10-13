@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Library Of Babel</title>
-  <link rel="icon" href="icon.png">
+    <link rel="icon" href="icon.png">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap');
 
@@ -158,19 +158,12 @@
 </head>
 <body>
     <header>
-        <!-- Logo en la esquina superior izquierda -->
-<img src="logo.svg" alt="Logo"  onclick="window.location.href = 'about.html';">
+        <img src="logo.svg" alt="Logo" onclick="window.location.href = 'about.html';">
 
-
-
-
- 
             <div></div>
             <div></div>
             <div></div>
         </div>
-
-        <!-- Menú desplegable -->
         <nav id="navMenu">
             <a href="about.html">Sobre Nosotros</a>
         </nav>
@@ -179,7 +172,6 @@
     <div class="container">
         <h1>Welcome to The Library of Babel</h1>
 
-        <!-- Formulario para ingresar índices de habitación y libro -->
         <div class="navigation">
             <label for="roomIndex">Room:</label>
             <input type="text" id="roomIndex" placeholder="Ej: A1B2" maxlength="4">
@@ -195,19 +187,17 @@
             <p><strong>Shelf:</strong> <span id="displayBookIndex"></span></p>
         </div>
 
-        <!-- Sección de búsqueda -->
         <div class="search-section">
-            <label for="searchTerm">Buscar palabra o frase:</label>
+            <label for="searchTerm">Search for word or phrase:</label>
             <input type="text" id="searchTerm" placeholder="Word or phrase">
             <button onclick="searchInBook()">Search in the book</button>
         </div>
 
-        <!-- Contenido generado del libro -->
         <div id="bookContent"></div>
 
         <footer>
-         <img src="today.svg" alt="Logo">
-            <p>&copy Inspired by the Library of Babel by Jorge Luis Borges. Page created by Jared López</p>
+            <img src="today.svg" alt="Logo">
+            <p>&copy Inspired by the Library of Babel by Jorge Luis Borges. Page created by Jared López. A simple page but with a probability of 14,776,336,000 unique generations. </p>
         </footer>
     </div>
 
@@ -224,29 +214,21 @@
                 return;
             }
 
-            // Mostramos los detalles en la interfaz
             document.getElementById('displayRoomIndex').textContent = roomIndex;
             document.getElementById('displayBookIndex').textContent = bookIndex;
 
-            // Generamos el contenido del libro basado en los índices
             currentContent = generateTextFromIndex(roomIndex, bookIndex);
             document.getElementById('bookContent').textContent = currentContent;
         }
 
         function generateTextFromIndex(room, book) {
-            const seed = hash(room + book); // Crear una semilla combinada de la habitación y el estante
+            const seed = hash(room + book);
             let text = '';
-            const length = 3200;  // Número de caracteres por libro
+            const length = 3200;
 
-            // Generamos texto pseudoaleatorio basado en la semilla
             for (let i = 0; i < length; i++) {
                 let randomChar = getPseudoRandomCharacter(seed + i);
                 text += randomChar;
-            }
-
-            // Insertamos la palabra buscada si existe
-            if (searchTerm) {
-                text = insertSearchTerm(text, searchTerm);
             }
 
             return text;
@@ -257,7 +239,7 @@
             for (let i = 0; i < str.length; i++) {
                 const char = str.charCodeAt(i);
                 hash = (hash << 5) - hash + char;
-                hash |= 0; // Convertimos a un número de 32 bits
+                hash |= 0;
             }
             return Math.abs(hash);
         }
@@ -266,19 +248,6 @@
             const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,.;:!? ';
             const randomIndex = Math.floor((Math.sin(seed) + 1) * 10000) % characters.length;
             return characters[randomIndex];
-        }
-
-        // Función para insertar la palabra buscada en el contenido generado
-                function insertSearchTerm(text, searchTerm) {
-            const insertPositions = [500, 1500, 2500]; // Posiciones donde insertar la palabra buscada
-
-            insertPositions.forEach(position => {
-                if (position < text.length) {
-                    text = text.slice(0, position) + searchTerm + ' ' + text.slice(position);
-                }
-            });
-
-            return text;
         }
 
         function searchInBook() {
@@ -293,8 +262,15 @@
         }
 
         function highlightSearchTerm(text, term) {
-            const regex = new RegExp(`(${term})`, 'gi'); // Expresión regular para buscar sin importar mayúsculas/minúsculas
-            return text.replace(regex, '<mark>$1</mark>'); // Envolver la palabra buscada en <mark>
+            let highlightedText = text;
+
+            // Recorre cada letra de la palabra buscada
+            for (let letter of term) {
+                const regex = new RegExp(`(${letter})`, 'gi'); // Busca cada letra sin importar mayúsculas/minúsculas
+                highlightedText = highlightedText.replace(regex, '<mark>$1</mark>'); // Resalta la letra
+            }
+
+            return highlightedText;
         }
 
         function toggleMenu() {
