@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Of Babel</title>
+    <link rel="icon" href="icon.png">
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: white;
+            color: black;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            text-align: center;
+        }
+
+        .search-box input, .letter-search input {
+            width: 150px;
+            margin: 5px;
+            padding: 5px;
+            border: 1px solid black;
+        }
+
+        button {
+            padding: 5px 10px;
+            border: 1px solid black;
+            background-color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: lightgray;
+        }
+
+        .output {
+            margin-top: 20px;
+            text-align: left; /* Alinear texto a la izquierda */
+            white-space: pre-wrap; /* Ajustar texto a múltiples líneas */
+            word-wrap: break-word; /* Permitir el ajuste de palabras largas */
+            border: 1px solid black; /* Borde negro fino */
+            background-color: white; /* Fondo blanco */
+            padding: 10px; /* Espaciado interno */
+            max-height: 400px; /* Altura máxima del cuadro */
+            overflow-y: auto; /* Scroll vertical si es necesario */
+        }
+
+        .highlight {
+            background-color: yellow;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="today.svg" alt="Logo" onclick="location.href='library.html'">
+        <h5>Jorge Luis Borges</h5>
+        <h1>Library Of Babel</h1>
+        
+        <div class="search-box">
+            <input type="text" id="room" placeholder="Room" maxlength="4">
+            <input type="text" id="shelf" placeholder="Shelf" maxlength="7">
+            <button onclick="generateText()">Take book</button>
+        </div>
+
+        <h2 id="title"></h2>
+        
+        <div class="output" id="generated-text"></div>
+
+        <div class="letter-search">
+            <input type="text" id="letter-input" placeholder="Search for letters">
+            <button onclick="highlightLetters()">Look for</button>
+        </div>
+
+        <div class="output">
+            <h3>Coincidences</h3>
+            <p id="highlighted-text"></p>
+        </div>
+    </div>
+
+    <script>
+        function generateText() {
+            const room = document.getElementById("room").value;
+            const shelf = document.getElementById("shelf").value;
+
+            // Generar un título basado en habitación y estante
+            const title = `R:${room} S:${shelf}`;
+            const randomText = createPseudoRandomText(room, shelf);
+            
+            document.getElementById("title").innerText = title;
+            document.getElementById("generated-text").innerText = randomText;
+            document.getElementById("highlighted-text").innerText = "";
+            document.getElementById("letter-input").value = "";
+        }
+
+        function createPseudoRandomText(room, shelf) {
+            // Crear texto basado en la habitación y estante
+            const textLength = 3200;
+            const characters = 'abcdefghijklmnopqrstuvwxyz,.'; // Conjunto de caracteres
+            let text = '';
+
+            for (let i = 0; i < textLength; i++) {
+                const randomIndex = Math.floor(Math.abs(Math.sin(i + room.length + shelf.length) * 100) % characters.length);
+                text += characters[randomIndex];
+            }
+
+            return text;
+        }
+
+        function highlightLetters() {
+            const text = document.getElementById("generated-text").innerText;
+            const lettersToHighlight = document.getElementById("letter-input").value.split('');
+            const highlightedText = text.split('').map(char => {
+                if (lettersToHighlight.includes(char)) {
+                    return `<span class="highlight">${char}</span>`;
+                }
+                return char;
+            }).join('');
+
+            document.getElementById("highlighted-text").innerHTML = highlightedText;
+        }
+    </script>
+</body>
+</html>
