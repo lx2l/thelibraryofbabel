@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Library Of Babel</title>
+  <link rel="icon" href="icon.png">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap');
+
+        body {
+            font-family: 'Noto Serif', serif;
+            background-color: #f9f9f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 60px;
+            background-color: #000;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            z-index: 1000;
+        }
+
+        header img {
+            height: 40px;
+            cursor: pointer;
+        }
+
+        .menu-icon {
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+        }
+
+        .menu-icon div {
+            width: 100%;
+            height: 4px;
+            background-color: #fff;
+            margin: 6px 0;
+            transition: 0.3s;
+        }
+
+        .menu-icon.open div:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .menu-icon.open div:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-icon.open div:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        nav {
+            position: fixed;
+            top: 60px;
+            right: 0;
+            width: 200px;
+            background-color: #333;
+            display: none;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 0;
+            display: block;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 100px auto 20px auto; /* Ajusta el margen para evitar el header */
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #222;
+        }
+
+        .navigation, .search-section {
+            margin-bottom: 20px;
+        }
+
+        label {
+            margin-right: 10px;
+            font-size: 1.1em;
+        }
+
+        input {
+            padding: 8px;
+            margin-right: 10px;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        #bookContent {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            height: 400px; /* Altura fija */
+            overflow-y: auto; /* Barra de desplazamiento */
+            white-space: pre-wrap;
+            font-family: 'Courier New', Courier, monospace;
+            text-align: left;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+
+        #bookDetails p {
+            margin: 0;
+        }
+
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 0.9em;
+            color: #777;
+        }
+
+        mark {
+            background-color: yellow;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <!-- Logo en la esquina superior izquierda -->
+<img src="logo.svg" alt="Logo"  onclick="window.location.href = 'about.html';">
+
+
+
+
+ 
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+
+        <!-- Menú desplegable -->
+        <nav id="navMenu">
+            <a href="about.html">Sobre Nosotros</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>Welcome to The Library of Babel</h1>
+
+        <!-- Formulario para ingresar índices de habitación y libro -->
+        <div class="navigation">
+            <label for="roomIndex">Room:</label>
+            <input type="text" id="roomIndex" placeholder="Ej: A1B2" maxlength="4">
+            
+            <label for="bookIndex">Shelf:</label>
+            <input type="number" id="bookIndex" placeholder="Ej: 100">
+            
+            <button onclick="generateBook()">Take book</button>
+        </div>
+
+        <div id="bookDetails">
+            <p><strong>Room:</strong> <span id="displayRoomIndex"></span></p>
+            <p><strong>Shelf:</strong> <span id="displayBookIndex"></span></p>
+        </div>
+
+        <!-- Sección de búsqueda -->
+        <div class="search-section">
+            <label for="searchTerm">Buscar palabra o frase:</label>
+            <input type="text" id="searchTerm" placeholder="Word or phrase">
+            <button onclick="searchInBook()">Search in the book</button>
+        </div>
+
+        <!-- Contenido generado del libro -->
+        <div id="bookContent"></div>
+
+        <footer>
+         <img src="today.svg" alt="Logo">
+            <p>&copy Inspired by the Library of Babel by Jorge Luis Borges. Page created by Jared López</p>
+        </footer>
+    </div>
+
+    <script>
+        let currentContent = ''; // Variable para guardar el contenido del libro actual
+        let searchTerm = ''; // Variable para guardar la palabra buscada
+
+        function generateBook() {
+            const roomIndex = document.getElementById('roomIndex').value;
+            const bookIndex = document.getElementById('bookIndex').value;
+
+            if (!roomIndex || !bookIndex) {
+                alert("Please fill in the field.");
+                return;
+            }
+
+            // Mostramos los detalles en la interfaz
+            document.getElementById('displayRoomIndex').textContent = roomIndex;
+            document.getElementById('displayBookIndex').textContent = bookIndex;
+
+            // Generamos el contenido del libro basado en los índices
+            currentContent = generateTextFromIndex(roomIndex, bookIndex);
+            document.getElementById('bookContent').textContent = currentContent;
+        }
+
+        function generateTextFromIndex(room, book) {
+            const seed = hash(room + book); // Crear una semilla combinada de la habitación y el estante
+            let text = '';
+            const length = 3200;  // Número de caracteres por libro
+
+            // Generamos texto pseudoaleatorio basado en la semilla
+            for (let i = 0; i < length; i++) {
+                let randomChar = getPseudoRandomCharacter(seed + i);
+                text += randomChar;
+            }
+
+            // Insertamos la palabra buscada si existe
+            if (searchTerm) {
+                text = insertSearchTerm(text, searchTerm);
+            }
+
+            return text;
+        }
+
+        function hash(str) {
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                const char = str.charCodeAt(i);
+                hash = (hash << 5) - hash + char;
+                hash |= 0; // Convertimos a un número de 32 bits
+            }
+            return Math.abs(hash);
+        }
+
+        function getPseudoRandomCharacter(seed) {
+            const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,.;:!? ';
+            const randomIndex = Math.floor((Math.sin(seed) + 1) * 10000) % characters.length;
+            return characters[randomIndex];
+        }
+
+        // Función para insertar la palabra buscada en el contenido generado
+                function insertSearchTerm(text, searchTerm) {
+            const insertPositions = [500, 1500, 2500]; // Posiciones donde insertar la palabra buscada
+
+            insertPositions.forEach(position => {
+                if (position < text.length) {
+                    text = text.slice(0, position) + searchTerm + ' ' + text.slice(position);
+                }
+            });
+
+            return text;
+        }
+
+        function searchInBook() {
+            const searchInput = document.getElementById('searchTerm').value;
+            if (!searchInput) {
+                alert("Enter a word or phrase.");
+                return;
+            }
+            searchTerm = searchInput;
+            const highlightedText = highlightSearchTerm(currentContent, searchTerm);
+            document.getElementById('bookContent').innerHTML = highlightedText;
+        }
+
+        function highlightSearchTerm(text, term) {
+            const regex = new RegExp(`(${term})`, 'gi'); // Expresión regular para buscar sin importar mayúsculas/minúsculas
+            return text.replace(regex, '<mark>$1</mark>'); // Envolver la palabra buscada en <mark>
+        }
+
+        function toggleMenu() {
+            const menu = document.getElementById('navMenu');
+            const menuIcon = document.querySelector('.menu-icon');
+            menu.style.display = (menu.style.display === 'flex') ? 'none' : 'flex'; // Alternar visibilidad
+            menuIcon.classList.toggle('open'); // Cambiar el estado del menú
+        }
+    </script>
+</body>
+</html>
