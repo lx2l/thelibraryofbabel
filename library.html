@@ -97,14 +97,21 @@
             document.getElementById("letter-input").value = "";
         }
 
-        function createPseudoRandomText(room, shelf) {
-            // Crear texto basado en la habitación y estante
-            const textLength = 3200;
-            const characters = 'abcdefghijklmnopqrstuvwxyz,.'; // Conjunto de caracteres
-            let text = '';
+        // Generador de números aleatorios basado en una semilla
+        function seededRandom(seed) {
+            const x = Math.sin(seed) * 10000;
+            return x - Math.floor(x);
+        }
 
+        function createPseudoRandomText(room, shelf) {
+            const textLength = 3200;
+            const characters = 'abcdefghijklmnopqrstuvwxyz,. '; // Conjunto de caracteres
+            let text = '';
+            const seed = parseInt(room) + parseInt(shelf); // Crear una semilla combinando room y shelf
+            
             for (let i = 0; i < textLength; i++) {
-                const randomIndex = Math.floor(Math.abs(Math.sin(i + room.length + shelf.length) * 100) % characters.length);
+                // Usar la semilla y el índice para crear un carácter aleatorio
+                const randomIndex = Math.floor(seededRandom(seed + i) * characters.length);
                 text += characters[randomIndex];
             }
 
