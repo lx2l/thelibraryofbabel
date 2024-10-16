@@ -3,92 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="msvalidate.01" content="666C13001C60147C20C383BC17097D76" />
-    <title>The Library Of Babel</title>
-    <link rel="icon" href="icon.png">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@100..900&display=swap" rel="stylesheet">
+    <title>The Library Of Babel </title>
+       <link rel="icon" href="icon.png">
     <style>
+
         body {
-            font-family: 'Noto Serif', serif;
-            color: black;
-            margin: 0;
-            padding: 20px;
-            max-width: 800px; /* Limitar el ancho del texto */
-            line-height: 1.6; /* Aumentar la legibilidad */
-            transition: background-color 0.5s; /* Transición suave al cambiar el fondo */
-        }
-
-        header {
-            background-color: black; /* Color de fondo negro */
+            background-color: white;
+            font-family: 'Courier New', Courier, monospace;
             display: flex;
-            align-items: center; /* Centra verticalmente el contenido */
-            padding: 10px; /* Espaciado interno */
-            position: fixed; /* Mantiene el header fijo en la parte superior */
-            top: 0; /* Coloca el header en la parte superior */
-            left: 0; /* Alinea el header a la izquierda */
-            right: 0; /* Alinea el header a la derecha */
-            z-index: 1000; /* Asegura que el header esté por encima del contenido */
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
         }
 
-        .logo {
-            height: 60px; /* Ajusta la altura del logo */
-            width: auto; /* Mantiene la proporción del logo */
-            cursor: pointer; /* Cambia el cursor al pasar sobre el logo */
+        .container {
+            text-align: center;
         }
 
-        /* Ajusta el contenido para evitar que quede debajo del header */
-        main {
-            padding-top: 70px; /* Espaciado superior para que el contenido no se superponga al header */
+        .logo img {
+            max-width: 250px; /* Ajustar tamaño del logo si es necesario */
+        }
+
+        .links p {
+            cursor: pointer;
+            color: gray;
+            margin: 80px 0; /* Espacio entre los textos */
+        }
+
+        .links p:hover {
+            color: gray;
         }
     </style>
 </head>
 <body>
-    <header>
-        <img src="logo-white.svg" alt="Logo" class="logo" onclick="location.href='library.html'"><img src="thelibrary.svg" alt="Library Of Babel">
-  
-  
-    </header>
-
-    <main>
-        <h1>Welcome</h1>
-        <p>My name is Jared, a guy who is a fan of anything he finds interesting, I won't talk too much about myself, other than I created this page as a simple form of my entertainment.</p>
+    <div class="container">
         
-        <p>I also clarify that this page is not so complex, and its form does not recreate, it takes a freer direction.</p>
+        <div class="logo">
+            <img src="logo.svg" alt="Logo" id="logo">
+        </div>
 
-        <p><strong>(You can tap the icon above if you want to enter the functional page)</strong></p>
+<h3>The Library Of Babel</h3>
+        
+        <div class="links">
+     <hr>
+            
+            <p onclick="navigateTo('library.html')">Search</p>
+            <p onclick="navigateTo('about.html')">About</p>
+      
+      <hr>
 
-        <p>The theme of the page is something that tries in a free way to make a simple concept of what The Library of Babel is. But what is the library of babel? </p>
-       
-        <p>"The Library of Babel" is a short story written by the Argentine author Jorge Luis Borges, included in his collection "Ficciones," published in 1944. The story presents a universe in the form of a vast library that contains all possible books, organized in an endless labyrinth. Each book in this library is a unique combination of letters and symbols, which means there are texts containing all the wisdom and history of humanity, as well as completely nonsensical works.</p>
-
-        <p><strong>Main Themes</strong></p>
-
-        <ul>
-            <li><strong>Infinity and Randomness:</strong> The library represents the notion of infinity in which every combination of characters has already been written. This generates a reflection on the meaning of knowledge and the search for meaning in a chaotic universe.</li>
-            <li><strong>Knowledge:</strong> Through the library, Borges addresses the idea that knowledge is overwhelming. While there are books that contain truths and realities, there are also many others that are absurd. This raises questions about the nature of truth and the value of knowledge.</li>
-            <li><strong>The Labyrinth:</strong> The library resembles a labyrinth, symbolizing the human quest for knowledge and the difficulty of finding meaning or purpose amid the vastness of understanding.</li>
-            <li><strong>Loneliness:</strong> The inhabitants of the library, who seek meaning and truth in their books, live in a state of loneliness and despair, reflecting the existential anguish of human beings.</li>
-        </ul>
-
-        <p><strong>Structure and Style</strong></p>
-
-        <p>The story is written in a philosophical and metaphorical style characteristic of Borges, using elements of science fiction. Through his prose, the author invites readers to reflect on profound questions related to time, space, and the human condition.</p>
-
-        <p>"The Library of Babel" is considered one of Borges's most emblematic works and has influenced contemporary literature, exploring concepts that resonate in philosophy, theology, and the theory of knowledge.</p>
-    </main>
+      <h6>In honor of Jorge Luis Borges</h6>
+        </div>
+    </div>
 
     <script>
-        // Array de colores
-        const colores = ['#F2FFF9','#EBBEE2', '#FFEDC3','#E8C3B6', '#DDCEFF', '#E8D99F'];
-
-        // Función para cambiar el fondo aleatoriamente
-        function cambiarFondo() {
-            const colorAleatorio = colores[Math.floor(Math.random() * colores.length)];
-            document.body.style.backgroundColor = colorAleatorio;
+        function navigateTo(page) {
+            window.location.href = page;
         }
-
-        // Cambiar el fondo al cargar la página
-        window.onload = cambiarFondo;
     </script>
 </body>
 </html>
